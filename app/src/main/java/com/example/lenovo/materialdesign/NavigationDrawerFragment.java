@@ -62,8 +62,8 @@ public class NavigationDrawerFragment extends Fragment {
     public static List<Information> getData() {
         List<Information> list = new ArrayList<Information>();
         Information info;
-        int iconIds[] = {R.mipmap.ic_launcher, R.mipmap.ic_launcher, R.mipmap.ic_launcher, R.mipmap.ic_launcher};
-        String[] titles = {"Title 1", "Title 2", "Title 3", "Title 4"};
+        int iconIds[] = {R.mipmap.ic_launcher, R.mipmap.ic_launcher, R.mipmap.ic_launcher, R.mipmap.ic_launcher, R.mipmap.ic_launcher, R.mipmap.ic_launcher, R.mipmap.ic_launcher, R.mipmap.ic_launcher, R.mipmap.ic_launcher, R.mipmap.ic_launcher, R.mipmap.ic_launcher};
+        String[] titles = {"Title 1", "Title 2", "Title 3", "Title 4", "Title 5", "Title 6", "Title 7", "Title 8", "Title 9", "Title 10", "Title 11"};
         for (int i = 0; i < iconIds.length && i < titles.length; i++) {
             info = new Information();
             info.iconId = iconIds[i];

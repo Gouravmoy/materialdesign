@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Collections;
 import java.util.List;
@@ -16,11 +17,13 @@ import java.util.List;
  */
 public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.MyViewHolder> {
     private final LayoutInflater inflater;
+    private Context context;
     List<Information> informationList = Collections.emptyList();
 
     public InfoAdapter(Context context, List<Information> informationList) {
         inflater = LayoutInflater.from(context);
         this.informationList = informationList;
+        this.context = context;
     }
 
     @Override
@@ -42,7 +45,12 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.MyViewHolder> 
         return informationList.size();
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
+    public void delete(int position) {
+        informationList.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView imageView;
         TextView textView;
 
@@ -50,6 +58,13 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.MyViewHolder> 
             super(itemView);
             imageView = (ImageView) itemView.findViewById(R.id.listIcon);
             textView = (TextView) itemView.findViewById(R.id.listText);
+            imageView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            Toast.makeText(context, "Item Deleted - " + getAdapterPosition(), Toast.LENGTH_SHORT).show();
+            delete(getAdapterPosition());
         }
     }
 }
