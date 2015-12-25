@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">materialdesign</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="next">Next</string>
+    <string name="title_activity_sub">SubActivity</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+</resources>
