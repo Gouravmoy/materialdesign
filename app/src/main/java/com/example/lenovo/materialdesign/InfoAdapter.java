@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.Collections;
 import java.util.List;
@@ -17,6 +16,7 @@ import java.util.List;
  */
 public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.MyViewHolder> {
     private final LayoutInflater inflater;
+    //private ClickListner clickListner;
     private Context context;
     List<Information> informationList = Collections.emptyList();
 
@@ -25,6 +25,11 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.MyViewHolder> 
         this.informationList = informationList;
         this.context = context;
     }
+
+    /*public void setClickListner(ClickListner clickListner) {
+        this.clickListner = clickListner;
+    }*/
+
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -50,21 +55,29 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.MyViewHolder> 
         notifyItemRemoved(position);
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class MyViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
         TextView textView;
 
         public MyViewHolder(View itemView) {
             super(itemView);
+            //itemView.setOnClickListener(this);
             imageView = (ImageView) itemView.findViewById(R.id.listIcon);
             textView = (TextView) itemView.findViewById(R.id.listText);
-            imageView.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View v) {
-            Toast.makeText(context, "Item Deleted - " + getAdapterPosition(), Toast.LENGTH_SHORT).show();
-            delete(getAdapterPosition());
         }
     }
+
+        /*@Override
+        public void onClick(View v) {
+            if(clickListner!=null){
+                clickListner.itemClicked(v,getAdapterPosition());
+            }
+            *//*Toast.makeText(context, "Item Deleted - " + getAdapterPosition(), Toast.LENGTH_SHORT).show();
+            delete(getAdapterPosition());*//*
+        }
+    }
+
+    public interface ClickListner {
+        public void itemClicked(View view, int position);
+    }*/
 }
