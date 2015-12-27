@@ -8,6 +8,11 @@
         android:title="Settings"
         app:showAsAction="never"></item>
     <item
+        android:id="@+id/action_library"
+        android:orderInCategory="100"
+        android:title="Library Impl"
+        app:showAsAction="never"></item>
+    <item
         android:id="@+id/navigate"
         android:icon="@drawable/ic_action"
         android:orderInCategory="200"

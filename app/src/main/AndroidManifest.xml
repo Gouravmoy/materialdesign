@@ -26,6 +26,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.lenovo.materialdesign.MainActivity" />
         </activity>
+        <activity
+            android:name=".ActivityUsingTabLibrary"
+            android:label="@string/title_activity_activity_using_tab_library"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

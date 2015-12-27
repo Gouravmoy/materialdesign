@@ -1,0 +1,34 @@
+<!--<include layout="@layout/content_activity_using_tab_library" />-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/app_bar"
+        layout="@layout/app_bar"></include>
+
+    <hkm.ui.materialtabs.MaterialTabHost
+        android:id="@+id/materialTabHost"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        app:advtabs_iconColor="#FFFFFF"
+        app:advtabs_materialTabsPrimaryColor="@color/colorPrimary"
+        app:advtabs_accentColor="@color/colorAccent"
+        app:advtabs_nonFixTabsCountStart="4"
+        app:advtabs_hasIcons="true"/>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_below="@+id/materialTabHost"
+        android:layout_weight="1" />
+
+</LinearLayout>
+
+
+
+

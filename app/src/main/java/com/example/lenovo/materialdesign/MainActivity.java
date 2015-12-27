@@ -25,6 +25,7 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.TextView;
 
+import com.example.lenovo.materialdesign.tabs.MyFragment;
 import com.example.lenovo.materialdesign.tabs.SlidingTabLayout;
 
 public class MainActivity extends AppCompatActivity {
@@ -78,6 +79,9 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.navigate) {
             startActivity(new Intent(this, SubActivity.class));
         }
+        if (id == R.id.action_library) {
+            startActivity(new Intent(this, ActivityUsingTabLibrary.class));
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -100,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public CharSequence getPageTitle(int position) {
             Drawable drawable = getResources().getDrawable(icons[position]);
-            drawable.setBounds(0, 0, 120, 120);
+            drawable.setBounds(0, 0, 96, 96);
             ImageSpan imageSpan = new ImageSpan(drawable);
             SpannableString spannableString = new SpannableString(" ");
             spannableString.setSpan(imageSpan, 0, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -114,27 +118,5 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public static class MyFragment extends Fragment {
-        private TextView textView;
 
-        public static MyFragment getInstance(int position) {
-            MyFragment myFragment = new MyFragment();
-            Bundle args = new Bundle();
-            args.putInt("position", position);
-            myFragment.setArguments(args);
-            return myFragment;
-        }
-
-        @Nullable
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            View layout = inflater.inflate(R.layout.fragment_my, container, false);
-            textView = (TextView) layout.findViewById(R.id.tabTextView);
-            Bundle bundle = getArguments();
-            if (bundle != null) {
-                textView.setText("The Page Selected  " + bundle.getInt("position"));
-            }
-            return layout;
-        }
-    }
 }

@@ -6,7 +6,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    
+
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
     <string-array name="tabs">
@@ -14,5 +14,6 @@
         <item>TAB 2</item>
         <item>TAB 3</item>
     </string-array>
+    <string name="title_activity_activity_using_tab_library">ActivityUsingTabLibrary</string>
 
 </resources>
