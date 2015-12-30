@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        tools:context="com.example.lenovo.materialdesign.MainActivity">
+        tools:context=".activities.MainActivity">
 
 
         <LinearLayout
@@ -22,13 +22,13 @@
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
             android:orientation="vertical"
-            tools:context="com.example.lenovo.materialdesign.MainActivity">
+            tools:context=".activities.MainActivity">
 
             <include
                 android:id="@+id/app_bar"
                 layout="@layout/app_bar"></include>
 
-            <com.example.lenovo.materialdesign.tabs.SlidingTabLayout
+            <com.example.lenovo.materialdesign.views.SlidingTabLayout
                 android:id="@+id/tabs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
@@ -54,7 +54,7 @@
 
     <fragment
         android:id="@+id/fragment_navigation_drawer"
-        android:name="com.example.lenovo.materialdesign.NavigationDrawerFragment"
+        android:name="com.example.lenovo.materialdesign.fragments.NavigationDrawerFragment"
         android:layout_width="@dimen/nav_drawer_width"
         android:layout_height="match_parent"
         android:layout_gravity="start"

@@ -1,4 +1,4 @@
-package com.example.lenovo.materialdesign;
+package com.example.lenovo.materialdesign.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +10,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import com.example.lenovo.materialdesign.R;
 
 public class SubActivity extends AppCompatActivity {
     private Toolbar toolbar;

@@ -1,15 +1,13 @@
-package com.example.lenovo.materialdesign;
+package com.example.lenovo.materialdesign.activities;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.PagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -17,22 +15,25 @@ import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ImageSpan;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewParent;
-import android.widget.TextView;
 
-import com.example.lenovo.materialdesign.tabs.MyFragment;
-import com.example.lenovo.materialdesign.tabs.SlidingTabLayout;
+import com.example.lenovo.materialdesign.R;
+import com.example.lenovo.materialdesign.fragments.FragmentBoxOffice;
+import com.example.lenovo.materialdesign.fragments.FragmentSearch;
+import com.example.lenovo.materialdesign.fragments.FragmentUpcoming;
+import com.example.lenovo.materialdesign.fragments.NavigationDrawerFragment;
+import com.example.lenovo.materialdesign.views.SlidingTabLayout;
 
 public class MainActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private SlidingTabLayout mTabs;
     private ViewPager mPager;
+    public final int MOVIES_SEARCH_RESULTS = 0;
+    public final int MOVIES_HITS = 1;
+    public final int MOVIES_UPCOMING = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    class MyPagerAdapter extends FragmentPagerAdapter {
+    class MyPagerAdapter extends FragmentStatePagerAdapter {
 
         int[] icons = {R.drawable.mint, R.drawable.ic_tab2, R.drawable.ic_tab3};
         String[] tabText = getResources().getStringArray(R.array.tabs);
@@ -98,7 +99,18 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            MyFragment myFragment = MyFragment.getInstance(position);
+            Fragment myFragment = null;
+            switch (position) {
+                case MOVIES_SEARCH_RESULTS:
+                    myFragment = FragmentSearch.newInstance("", "");
+                    break;
+                case MOVIES_HITS:
+                    myFragment = FragmentBoxOffice.newInstance("", "");
+                    break;
+                case MOVIES_UPCOMING:
+                    myFragment = FragmentUpcoming.newInstance("", "");
+                    break;
+            }
             return myFragment;
         }
 

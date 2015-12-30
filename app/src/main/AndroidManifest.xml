@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -21,15 +21,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SubActivity"
+            android:name=".activities.SubActivity"
             android:label="@string/title_activity_sub"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.lenovo.materialdesign.MainActivity" />
+                android:value=".activities.MainActivity" />
         </activity>
         <activity
-            android:name=".ActivityUsingTabLibrary"
+            android:name=".activities.ActivityUsingTabLibrary"
             android:label="@string/title_activity_activity_using_tab_library"
             android:theme="@style/AppTheme"></activity>
     </application>

@@ -1,4 +1,4 @@
-package com.example.lenovo.materialdesign.tabs;
+package com.example.lenovo.materialdesign.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,7 +14,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.lenovo.materialdesign.R;
 import com.example.lenovo.materialdesign.network.VolleySingleton;
 

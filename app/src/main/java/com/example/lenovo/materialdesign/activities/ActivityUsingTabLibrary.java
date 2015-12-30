@@ -1,4 +1,4 @@
-package com.example.lenovo.materialdesign;
+package com.example.lenovo.materialdesign.activities;
 
 import android.annotation.TargetApi;
 import android.graphics.drawable.Drawable;
@@ -11,7 +11,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
-import com.example.lenovo.materialdesign.tabs.MyFragment;
+import com.example.lenovo.materialdesign.R;
+import com.example.lenovo.materialdesign.fragments.MyFragment;
 
 import hkm.ui.materialtabs.MaterialTab;
 import hkm.ui.materialtabs.MaterialTabHost;
