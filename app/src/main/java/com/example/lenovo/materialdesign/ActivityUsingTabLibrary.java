@@ -1,6 +1,8 @@
 package com.example.lenovo.materialdesign;
 
+import android.annotation.TargetApi;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -88,8 +90,12 @@ public class ActivityUsingTabLibrary extends AppCompatActivity implements Materi
             return getResources().getStringArray(R.array.tabs)[position];
         }
 
+        @TargetApi(Build.VERSION_CODES.LOLLIPOP)
         private Drawable getDrawable(int position) {
-            return getResources().getDrawable(icons[position], getTheme());
+
+            Drawable drawable = null;
+            drawable = getResources().getDrawable(icons[position], getTheme());
+            return drawable;
         }
     }
 }

@@ -16,6 +16,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.lenovo.materialdesign.R;
+import com.example.lenovo.materialdesign.network.VolleySingleton;
 
 /**
  * Created by lenovo on 12/27/2015.
@@ -41,7 +42,7 @@ public class MyFragment extends Fragment {
             textView.setText("The Page Selected  " + bundle.getInt("position"));
         }
 
-        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+        RequestQueue requestQueue = VolleySingleton.getinstance().getRequestQueue();
         StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://php.net/", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

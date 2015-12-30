@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        
+
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
 
     class MyPagerAdapter extends FragmentPagerAdapter {
 
-        int[] icons = {R.drawable.ic_tab1, R.drawable.ic_tab2, R.drawable.ic_tab3};
+        int[] icons = {R.drawable.mint, R.drawable.ic_tab2, R.drawable.ic_tab3};
         String[] tabText = getResources().getStringArray(R.array.tabs);
 
         public MyPagerAdapter(FragmentManager fm) {
