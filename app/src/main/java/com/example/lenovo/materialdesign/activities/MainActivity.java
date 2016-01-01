@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
 
     class MyPagerAdapter extends FragmentStatePagerAdapter {
 
-        int[] icons = {R.drawable.mint, R.drawable.ic_tab2, R.drawable.ic_tab3};
+        int[] icons = {R.drawable.ic_tab1, R.drawable.ic_tab2, R.drawable.ic_tab3};
         String[] tabText = getResources().getStringArray(R.array.tabs);
 
         public MyPagerAdapter(FragmentManager fm) {
