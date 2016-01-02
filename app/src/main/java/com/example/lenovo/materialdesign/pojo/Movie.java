@@ -1,12 +1,14 @@
 package com.example.lenovo.materialdesign.pojo;
 
+import java.util.Date;
+
 /**
  * Created by lenovo on 1/1/2016.
  */
 public class Movie {
-    private String id;
+    private Long id;
     private String title;
-    private String releaseDateTheaatre;
+    private Date releaseDateTheaatre;
     private int audienceScore;
     private String synopsis;
     private String urlThumbnail;
@@ -15,11 +17,11 @@ public class Movie {
     private String urlReviews;
     private String urlSimmilar;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -31,11 +33,11 @@ public class Movie {
         this.title = title;
     }
 
-    public String getReleaseDateTheaatre() {
+    public Date getReleaseDateTheaatre() {
         return releaseDateTheaatre;
     }
 
-    public void setReleaseDateTheaatre(String releaseDateTheaatre) {
+    public void setReleaseDateTheaatre(Date releaseDateTheaatre) {
         this.releaseDateTheaatre = releaseDateTheaatre;
     }
 
