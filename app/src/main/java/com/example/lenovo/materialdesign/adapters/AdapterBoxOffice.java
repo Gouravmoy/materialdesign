@@ -14,12 +14,18 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.example.lenovo.materialdesign.MyApplication;
 import com.example.lenovo.materialdesign.R;
+import com.example.lenovo.materialdesign.extras.Constants;
 import com.example.lenovo.materialdesign.logging.L;
 import com.example.lenovo.materialdesign.network.VolleySingleton;
 import com.example.lenovo.materialdesign.pojo.Movie;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import static com.example.lenovo.materialdesign.extras.Constants.NA;
 
 /**
  * Created by lenovo on 1/2/2016.
@@ -30,6 +36,7 @@ public class AdapterBoxOffice extends RecyclerView.Adapter<AdapterBoxOffice.View
     private List<Movie> movieList = new ArrayList<>();
     private VolleySingleton volleySingleton;
     private ImageLoader imageLoader;
+    private DateFormat dateFormat = new SimpleDateFormat("yyyy-DD-mm");
 
     public void setMovieList(ArrayList<Movie> movies) {
         this.movieList = movies;
@@ -53,10 +60,27 @@ public class AdapterBoxOffice extends RecyclerView.Adapter<AdapterBoxOffice.View
     public void onBindViewHolder(final ViewHolderBoxOffice holder, int position) {
         Movie currentMovie = movieList.get(position);
         holder.movieTitle.setText(currentMovie.getTitle());
-        holder.movieReleaseDate.setText(currentMovie.getReleaseDateTheaatre().toString());
-        holder.movieAudienceScore.setRating(currentMovie.getAudienceScore() / 20.0F);
+        Date movieReleaseDate = currentMovie.getReleaseDateTheaatre();
+        if (movieReleaseDate != null) {
+            String dateReleased = dateFormat.format(movieReleaseDate);
+            holder.movieReleaseDate.setText(dateReleased);
+        } else {
+            holder.movieReleaseDate.setText(NA);
+        }
+        int audienceScore = currentMovie.getAudienceScore();
+        if (audienceScore == -1) {
+            holder.movieAudienceScore.setRating(0.0F);
+            holder.movieAudienceScore.setAlpha(0.5F);
+        } else {
+            holder.movieAudienceScore.setRating(currentMovie.getAudienceScore() / 20.0F);
+        }
+
         String urlThumbnail = currentMovie.getUrlThumbnail();
-        if (urlThumbnail != null) {
+        loadImage(holder, urlThumbnail);
+    }
+
+    private void loadImage(final ViewHolderBoxOffice holder, String urlThumbnail) {
+        if (!urlThumbnail.equals(NA)) {
             imageLoader.get(urlThumbnail, new ImageLoader.ImageListener() {
                 @Override
                 public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {

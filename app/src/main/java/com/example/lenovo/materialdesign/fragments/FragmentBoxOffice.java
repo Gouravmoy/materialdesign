@@ -18,6 +18,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.lenovo.materialdesign.MyApplication;
 import com.example.lenovo.materialdesign.R;
 import com.example.lenovo.materialdesign.adapters.AdapterBoxOffice;
+import com.example.lenovo.materialdesign.extras.Constants;
 import com.example.lenovo.materialdesign.extras.UrlEndpoints;
 import com.example.lenovo.materialdesign.logging.L;
 import com.example.lenovo.materialdesign.network.VolleySingleton;
@@ -31,7 +32,9 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
+import static com.example.lenovo.materialdesign.extras.Constants.*;
 import static com.example.lenovo.materialdesign.extras.Keys.EndpointBoxOffice.KEY_AUDIENCE_SCORE;
 import static com.example.lenovo.materialdesign.extras.Keys.EndpointBoxOffice.KEY_ID;
 import static com.example.lenovo.materialdesign.extras.Keys.EndpointBoxOffice.KEY_MOVIES;
@@ -106,7 +109,7 @@ public class FragmentBoxOffice extends Fragment {
     }
 
     private void sendJSONRequest() {
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getRequestUrl(10), new Response.Listener<JSONObject>() {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getRequestUrl(30), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 listMovies = parseJsonResponse(response);
@@ -122,50 +125,62 @@ public class FragmentBoxOffice extends Fragment {
     }
 
     private ArrayList<Movie> parseJsonResponse(JSONObject response) {
-
         ArrayList<Movie> movieArrayList = new ArrayList<>();
-        if (response != null || response.length() > 0)
+        if (response != null || response.length() > 0) {
+            long id = -1;
+            String title = NA;
+            String releaseDate = NA;
+            int audienceScore = -1;
+            String synopsis = NA;
+            String thumbnailURL = NA;
             try {
                 JSONArray listJSONMovies = response.getJSONArray(KEY_MOVIES);
                 for (int i = 0; i < listJSONMovies.length(); i++) {
                     JSONObject movie = listJSONMovies.getJSONObject(i);
-                    long id = movie.getLong(KEY_ID);
-                    String title = movie.getString(KEY_TITLE);
+                    if (movie.has(KEY_ID) && !movie.isNull(KEY_ID)) {
+                        id = movie.getLong(KEY_ID);
+                    }
+                    if (movie.has(KEY_TITLE) && !movie.isNull(KEY_TITLE)) {
+                        title = movie.getString(KEY_TITLE);
+                    }
                     JSONObject releaseDtObj = movie.getJSONObject(KEY_RELEASE_DATES);
-                    String releaseDate = null;
-                    if (releaseDtObj.has(KEY_THEATER)) {
+                    releaseDate = null;
+                    if (releaseDtObj.has(KEY_THEATER) && !releaseDtObj.isNull(KEY_THEATER)) {
                         releaseDate = releaseDtObj.getString(KEY_THEATER);
-                    } else {
-                        releaseDate = "NA";
                     }
                     JSONObject ratingObj = movie.getJSONObject(KEY_RATINGS);
-                    int ratings = -1;
-                    if (ratingObj.has(KEY_AUDIENCE_SCORE)) {
-                        //String stringRatings = ratingObj.getString(KEY_AUDIENCE_SCORE);
-                        ratings = ratingObj.getInt(KEY_AUDIENCE_SCORE);
+                    if (ratingObj.has(KEY_AUDIENCE_SCORE) && !ratingObj.isNull(KEY_AUDIENCE_SCORE)) {
+                        audienceScore = ratingObj.getInt(KEY_AUDIENCE_SCORE);
                     }
-                    String synopsis = movie.getString(KEY_SYNOPSIS);
+                    if (movie.has(KEY_SYNOPSIS) && !movie.isNull(KEY_SYNOPSIS)) {
+                        synopsis = movie.getString(KEY_SYNOPSIS);
+                    }
                     JSONObject posterObj = movie.getJSONObject(KEY_POSTERS);
-                    String thumbnailURL = "";
-                    if (posterObj.has(KEY_THUMBNAIL)) {
+                    thumbnailURL = "";
+                    if (posterObj.has(KEY_THUMBNAIL) && !posterObj.isNull(KEY_THUMBNAIL)) {
                         thumbnailURL = posterObj.getString(KEY_THUMBNAIL);
                     }
                     Movie currentMovie = new Movie();
                     currentMovie.setId(id);
                     currentMovie.setTitle(title);
                     currentMovie.setSynopsis(synopsis);
-                    currentMovie.setAudienceScore(ratings);
-                    currentMovie.setReleaseDateTheaatre(dateFormat.parse(releaseDate));
+                    currentMovie.setAudienceScore(audienceScore);
+                    Date date = null;
+                    try {
+                        date = dateFormat.parse(releaseDate);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    currentMovie.setReleaseDateTheaatre(date);
                     currentMovie.setUrlThumbnail(thumbnailURL);
-                    movieArrayList.add(currentMovie);
-                    
-
+                    if (id != -1 && !title.equals(NA)) {
+                        movieArrayList.add(currentMovie);
+                    }
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
-            } catch (ParseException e) {
-                e.printStackTrace();
             }
+        }
         return movieArrayList;
     }
 
