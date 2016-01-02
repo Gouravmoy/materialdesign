@@ -158,6 +158,7 @@ public class FragmentBoxOffice extends Fragment {
                     currentMovie.setReleaseDateTheaatre(dateFormat.parse(releaseDate));
                     currentMovie.setUrlThumbnail(thumbnailURL);
                     movieArrayList.add(currentMovie);
+                    
 
                 }
             } catch (JSONException e) {
