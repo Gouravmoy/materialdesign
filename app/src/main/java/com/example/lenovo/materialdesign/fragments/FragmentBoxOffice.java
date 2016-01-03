@@ -8,17 +8,25 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.lenovo.materialdesign.MyApplication;
 import com.example.lenovo.materialdesign.R;
 import com.example.lenovo.materialdesign.adapters.AdapterBoxOffice;
-import com.example.lenovo.materialdesign.extras.Constants;
+import com.example.lenovo.materialdesign.extras.MoviesSorter;
+import com.example.lenovo.materialdesign.extras.SortListener;
 import com.example.lenovo.materialdesign.extras.UrlEndpoints;
 import com.example.lenovo.materialdesign.logging.L;
 import com.example.lenovo.materialdesign.network.VolleySingleton;
@@ -51,7 +59,7 @@ import static com.example.lenovo.materialdesign.extras.Keys.EndpointBoxOffice.KE
  * Use the {@link FragmentBoxOffice#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentBoxOffice extends Fragment {
+public class FragmentBoxOffice extends Fragment implements SortListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -68,7 +76,8 @@ public class FragmentBoxOffice extends Fragment {
     private DateFormat dateFormat = new SimpleDateFormat("yyyy-DD-mm");
     private RecyclerView listMovieHits;
     private AdapterBoxOffice adapterBoxOffice;
-
+    private TextView onVolleyError;
+    private MoviesSorter moviesSorter = new MoviesSorter();
 
     public FragmentBoxOffice() {
         // Required empty public constructor
@@ -112,30 +121,47 @@ public class FragmentBoxOffice extends Fragment {
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getRequestUrl(30), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
+                onVolleyError.setVisibility(View.GONE);
                 listMovies = parseJsonResponse(response);
                 adapterBoxOffice.setMovieList(listMovies);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                L.t(getActivity(), "Failed");
+                handelVolleyError(error);
             }
         });
         requestQueue.add(request);
     }
 
+    private void handelVolleyError(VolleyError error) {
+        onVolleyError.setVisibility(View.VISIBLE);
+        if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+            onVolleyError.setText(R.string.errorTimeOut);
+        } else if (error instanceof AuthFailureError) {
+            onVolleyError.setText(R.string.authFailure);
+        } else if (error instanceof ServerError) {
+            onVolleyError.setText(R.string.serverError);
+        } else if (error instanceof NetworkError) {
+            onVolleyError.setText(R.string.netConError);
+        } else if (error instanceof ParseError) {
+            onVolleyError.setText(R.string.parseError);
+        }
+    }
+
     private ArrayList<Movie> parseJsonResponse(JSONObject response) {
         ArrayList<Movie> movieArrayList = new ArrayList<>();
         if (response != null || response.length() > 0) {
-            long id = -1;
-            String title = NA;
-            String releaseDate = NA;
-            int audienceScore = -1;
-            String synopsis = NA;
-            String thumbnailURL = NA;
+
             try {
                 JSONArray listJSONMovies = response.getJSONArray(KEY_MOVIES);
                 for (int i = 0; i < listJSONMovies.length(); i++) {
+                    long id = -1;
+                    String title = NA;
+                    String releaseDate = NA;
+                    int audienceScore = -1;
+                    String synopsis = NA;
+                    String thumbnailURL = NA;
                     JSONObject movie = listJSONMovies.getJSONObject(i);
                     if (movie.has(KEY_ID) && !movie.isNull(KEY_ID)) {
                         id = movie.getLong(KEY_ID);
@@ -189,6 +215,7 @@ public class FragmentBoxOffice extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_box_office, container, false);
+        onVolleyError = (TextView) view.findViewById(R.id.textVolleyError);
         listMovieHits = (RecyclerView) view.findViewById(R.id.listMovieHits);
         listMovieHits.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapterBoxOffice = new AdapterBoxOffice(getActivity());
@@ -197,4 +224,25 @@ public class FragmentBoxOffice extends Fragment {
         return view;
     }
 
+    @Override
+    public void onSortByName() {
+        L.t(getActivity(), "Box Office Sort By Name");
+        //moviesSorter = new MoviesSorter();
+        moviesSorter.sortMoviesByName(listMovies);
+        adapterBoxOffice.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onSortByDate() {
+        L.t(getActivity(), "Box Office Sort By Date");
+        moviesSorter.sortMoviesByDate(listMovies);
+        adapterBoxOffice.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onSortByRating() {
+        L.t(getActivity(), "Box Office Sort By Ratng");
+        moviesSorter.sortMoviesByRating(listMovies);
+        adapterBoxOffice.notifyDataSetChanged();
+    }
 }

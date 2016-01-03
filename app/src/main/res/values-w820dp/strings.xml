@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="authFailure">Authentication Failure</string>
+    <string name="serverError">Server Error</string>
+    <string name="netConError">Network Connection Error</string>
+    <string name="parseError">Error in Parsing</string>
+</resources>

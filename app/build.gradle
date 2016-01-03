@@ -35,4 +35,5 @@ dependencies {
     compile 'com.github.jjhesk:MaterialTabsAdavanced:v0.17@aar'
     compile 'com.mcxiaoke.volley:library:1.0.19'
     compile 'com.telly:mrvector:0.2.0'
+    compile 'com.oguzdev:CircularFloatingActionMenu:1.0.2'
 }

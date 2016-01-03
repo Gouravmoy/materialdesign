@@ -3,8 +3,6 @@ package com.example.lenovo.materialdesign.activities;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -18,19 +16,28 @@ import android.text.style.ImageSpan;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.example.lenovo.materialdesign.R;
+import com.example.lenovo.materialdesign.extras.SortListener;
 import com.example.lenovo.materialdesign.fragments.FragmentBoxOffice;
 import com.example.lenovo.materialdesign.fragments.FragmentSearch;
 import com.example.lenovo.materialdesign.fragments.FragmentUpcoming;
 import com.example.lenovo.materialdesign.fragments.NavigationDrawerFragment;
 import com.example.lenovo.materialdesign.views.SlidingTabLayout;
+import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
+import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
+import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private static final String TAG_SORT_NAME = "sortName";
+    private static final String TAG_SORT_DATE = "sortDate";
+    private static final String TAG_SORT_RATINGS = "sortRatings";
     private Toolbar toolbar;
     private SlidingTabLayout mTabs;
     private ViewPager mPager;
+    private MyPagerAdapter adapter;
     public final int MOVIES_SEARCH_RESULTS = 0;
     public final int MOVIES_HITS = 1;
     public final int MOVIES_UPCOMING = 2;
@@ -46,7 +53,8 @@ public class MainActivity extends AppCompatActivity {
         NavigationDrawerFragment drawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), toolbar);
         mPager = (ViewPager) findViewById(R.id.pager);
-        mPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
+        adapter = new MyPagerAdapter(getSupportFragmentManager());
+        mPager.setAdapter(adapter);
         mTabs = (SlidingTabLayout) findViewById(R.id.tabs);
         mTabs.setDistributeEvenly(true);
         mTabs.setCustomTabView(R.layout.custom_tab_view, R.id.tabText);
@@ -58,15 +66,38 @@ public class MainActivity extends AppCompatActivity {
         });
         mTabs.setViewPager(mPager);
 
+        createFAB();
+    }
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+    private void createFAB() {
+        ImageView icon = new ImageView(this); // Create an icon
+        icon.setImageResource(R.drawable.sort);
+        FloatingActionButton actionButton = new FloatingActionButton.Builder(this)
+                .setContentView(icon)
+                .build();
+        ImageView iconSortName = new ImageView(this); // Create an icon
+        iconSortName.setImageResource(R.drawable.ic_tab1);
+        ImageView iconSortDate = new ImageView(this); // Create an icon
+        iconSortDate.setImageResource(R.drawable.ic_tab2);
+        ImageView iconSortRaiting = new ImageView(this); // Create an icon
+        iconSortRaiting.setImageResource(R.drawable.ic_tab3);
+
+        SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
+        SubActionButton buttonSortByName = itemBuilder.setContentView(iconSortName).build();
+        SubActionButton buttonSortByDate = itemBuilder.setContentView(iconSortDate).build();
+        SubActionButton buttonSortByRating = itemBuilder.setContentView(iconSortRaiting).build();
+        buttonSortByName.setTag(TAG_SORT_NAME);
+        buttonSortByDate.setTag(TAG_SORT_DATE);
+        buttonSortByRating.setTag(TAG_SORT_RATINGS);
+        buttonSortByName.setOnClickListener(this);
+        buttonSortByDate.setOnClickListener(this);
+        buttonSortByRating.setOnClickListener(this);
+        FloatingActionMenu actionMenu = new FloatingActionMenu.Builder(this)
+                .addSubActionView(buttonSortByName)
+                .addSubActionView(buttonSortByDate)
+                .addSubActionView(buttonSortByRating)
+                .attachTo(actionButton)
+                .build();
     }
 
     @Override
@@ -85,6 +116,23 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(this, ActivityUsingTabLibrary.class));
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(View v) {
+        Fragment fragment = (Fragment) adapter.instantiateItem(mPager, mPager.getCurrentItem());
+        if (fragment instanceof SortListener) {
+
+            if (v.getTag().equals(TAG_SORT_NAME)) {
+                ((SortListener) fragment).onSortByName();
+            }
+            if (v.getTag().equals(TAG_SORT_DATE)) {
+                ((SortListener) fragment).onSortByDate();
+            }
+            if (v.getTag().equals(TAG_SORT_RATINGS)) {
+                ((SortListener) fragment).onSortByRating();
+            }
+        }
     }
 
     class MyPagerAdapter extends FragmentStatePagerAdapter {

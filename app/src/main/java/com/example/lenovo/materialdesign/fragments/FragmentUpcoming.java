@@ -8,13 +8,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.lenovo.materialdesign.R;
+import com.example.lenovo.materialdesign.extras.SortListener;
+import com.example.lenovo.materialdesign.logging.L;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link FragmentUpcoming#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentUpcoming extends Fragment {
+public class FragmentUpcoming extends Fragment implements SortListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -63,4 +65,18 @@ public class FragmentUpcoming extends Fragment {
         return inflater.inflate(R.layout.fragment_upcoming, container, false);
     }
 
+    @Override
+    public void onSortByName() {
+        L.t(getActivity(), "Upcoming Sort By Name");
+    }
+
+    @Override
+    public void onSortByDate() {
+
+    }
+
+    @Override
+    public void onSortByRating() {
+
+    }
 }

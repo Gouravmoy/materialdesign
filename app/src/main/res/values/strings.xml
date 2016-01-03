@@ -15,5 +15,10 @@
         <item>TAB 3</item>
     </string-array>
     <string name="title_activity_activity_using_tab_library">ActivityUsingTabLibrary</string>
+    <string name="errorTimeOut">Connection Could not be Estabilished</string>
+    <string name="authFailure">Authentication Failure</string>
+    <string name="serverError">Server Error</string>
+    <string name="netConError">Network Connection Error</string>
+    <string name="parseError">Error in Parsing</string>
 
 </resources>
