@@ -1,11 +1,16 @@
 package com.example.lenovo.materialdesign.pojo;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import com.example.lenovo.materialdesign.logging.L;
+
 import java.util.Date;
 
 /**
  * Created by lenovo on 1/1/2016.
  */
-public class Movie {
+public class Movie implements Parcelable {
     private Long id;
     private String title;
     private Date releaseDateTheaatre;
@@ -16,6 +21,23 @@ public class Movie {
     private String urlCast;
     private String urlReviews;
     private String urlSimmilar;
+
+    public Movie() {
+    }
+
+    public Movie(Parcel input) {
+        id = input.readLong();
+        title = input.readString();
+        long dateMillis = input.readLong();
+        releaseDateTheaatre = (dateMillis == -1 ? null : new Date(dateMillis));
+        audienceScore = input.readInt();
+        synopsis = input.readString();
+        urlThumbnail = input.readString();
+        urlSelf = input.readString();
+        urlCast = input.readString();
+        urlReviews = input.readString();
+        urlSimmilar = input.readString();
+    }
 
     public Long getId() {
         return id;
@@ -96,4 +118,36 @@ public class Movie {
     public void setUrlSimmilar(String urlSimmilar) {
         this.urlSimmilar = urlSimmilar;
     }
+
+    @Override
+    public int describeContents() {
+        L.m("Describes Contents of Movie");
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(title);
+        dest.writeLong(releaseDateTheaatre == null ? -1 : releaseDateTheaatre.getTime());
+        dest.writeInt(audienceScore);
+        dest.writeString(synopsis);
+        dest.writeString(urlThumbnail);
+        dest.writeString(urlSelf);
+        dest.writeString(urlCast);
+        dest.writeString(urlReviews);
+        dest.writeString(urlSimmilar);
+    }
+
+    public static final Parcelable.Creator<Movie> CREATOR
+            = new Parcelable.Creator<Movie>() {
+        public Movie createFromParcel(Parcel in) {
+            L.m("create from parcel :Movie");
+            return new Movie(in);
+        }
+
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
 }
