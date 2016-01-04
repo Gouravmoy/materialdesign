@@ -3,6 +3,12 @@
     package="com.example.lenovo.materialdesign">
 
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+    <!-- Always required on api < 21, needed to keep a wake lock while your job is running -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- Required on api < 21 if you are using setRequiredNetworkType(int) -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- Required on all api levels if you are using setPersisted(true) -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -32,6 +38,11 @@
             android:name=".activities.ActivityUsingTabLibrary"
             android:label="@string/title_activity_activity_using_tab_library"
             android:theme="@style/AppTheme"></activity>
+        <service android:name=".services.MyService"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:exported="true">
+
+        </service>
     </application>
 
 </manifest>

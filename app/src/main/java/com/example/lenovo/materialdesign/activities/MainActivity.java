@@ -1,5 +1,6 @@
 package com.example.lenovo.materialdesign.activities;
 
+import android.content.ComponentName;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -24,16 +25,23 @@ import com.example.lenovo.materialdesign.fragments.FragmentBoxOffice;
 import com.example.lenovo.materialdesign.fragments.FragmentSearch;
 import com.example.lenovo.materialdesign.fragments.FragmentUpcoming;
 import com.example.lenovo.materialdesign.fragments.NavigationDrawerFragment;
+import com.example.lenovo.materialdesign.services.MyService;
 import com.example.lenovo.materialdesign.views.SlidingTabLayout;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
+
+import me.tatarka.support.job.JobInfo;
+import me.tatarka.support.job.JobScheduler;
+import me.tatarka.support.os.PersistableBundle;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG_SORT_NAME = "sortName";
     private static final String TAG_SORT_DATE = "sortDate";
     private static final String TAG_SORT_RATINGS = "sortRatings";
+    private static final int JOB_ID = 100;
+    private JobScheduler jobScheduler;
     private Toolbar toolbar;
     private SlidingTabLayout mTabs;
     private ViewPager mPager;
@@ -46,7 +54,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        jobScheduler = JobScheduler.getInstance(this);
+        constructJob();
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -67,6 +76,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mTabs.setViewPager(mPager);
 
         createFAB();
+    }
+
+    private void constructJob() {
+        JobInfo.Builder builder = new JobInfo.Builder(JOB_ID, new ComponentName(this, MyService.class));
+        builder.setPeriodic(2000)
+                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED)
+                .setPersisted(true);
+        jobScheduler.schedule(builder.build());
     }
 
     private void createFAB() {
