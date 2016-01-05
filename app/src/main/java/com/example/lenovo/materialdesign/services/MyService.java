@@ -47,6 +47,7 @@ public class MyService extends JobService {
     @Override
     public boolean onStartJob(JobParameters params) {
         new MyTask(this).execute(params);
+        int i=0;
         return true;
     }
 
