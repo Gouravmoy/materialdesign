@@ -14,17 +14,15 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
 import com.android.volley.ParseError;
-import com.android.volley.RequestQueue;
 import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageLoader;
+import com.example.lenovo.materialdesign.MyApplication;
 import com.example.lenovo.materialdesign.R;
 import com.example.lenovo.materialdesign.adapters.AdapterBoxOffice;
 import com.example.lenovo.materialdesign.extras.MoviesSorter;
 import com.example.lenovo.materialdesign.extras.SortListener;
 import com.example.lenovo.materialdesign.logging.L;
-import com.example.lenovo.materialdesign.network.VolleySingleton;
 import com.example.lenovo.materialdesign.pojo.Movie;
 
 import java.text.DateFormat;
@@ -79,7 +77,6 @@ public class FragmentBoxOffice extends Fragment implements SortListener {
     }
 
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,7 +95,6 @@ public class FragmentBoxOffice extends Fragment implements SortListener {
     }
 
 
-
     private void handelVolleyError(VolleyError error) {
         onVolleyError.setVisibility(View.VISIBLE);
         if (error instanceof TimeoutError || error instanceof NoConnectionError) {
@@ -115,7 +111,6 @@ public class FragmentBoxOffice extends Fragment implements SortListener {
     }
 
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -128,10 +123,11 @@ public class FragmentBoxOffice extends Fragment implements SortListener {
         listMovieHits.setAdapter(adapterBoxOffice);
         if (savedInstanceState != null) {
             listMovies = savedInstanceState.getParcelableArrayList(STATE_MOVIES);
-            adapterBoxOffice.setMovieList(listMovies);
         } else {
             //sendJSONRequest();
+            listMovies = MyApplication.getWritableDatabase().getAllMoviesBoxOffice();
         }
+        adapterBoxOffice.setMovieList(listMovies);
         return view;
     }
 
