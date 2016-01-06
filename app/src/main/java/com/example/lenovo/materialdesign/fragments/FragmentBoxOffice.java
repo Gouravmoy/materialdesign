@@ -3,6 +3,7 @@ package com.example.lenovo.materialdesign.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,10 +21,12 @@ import com.android.volley.VolleyError;
 import com.example.lenovo.materialdesign.MyApplication;
 import com.example.lenovo.materialdesign.R;
 import com.example.lenovo.materialdesign.adapters.AdapterBoxOffice;
+import com.example.lenovo.materialdesign.callbacks.BoxOfficeLoadedListner;
 import com.example.lenovo.materialdesign.extras.MoviesSorter;
 import com.example.lenovo.materialdesign.extras.SortListener;
 import com.example.lenovo.materialdesign.logging.L;
 import com.example.lenovo.materialdesign.pojo.Movie;
+import com.example.lenovo.materialdesign.tasks.TaskLoadMoviesBoxOffice;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -34,7 +37,7 @@ import java.util.ArrayList;
  * Use the {@link FragmentBoxOffice#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentBoxOffice extends Fragment implements SortListener {
+public class FragmentBoxOffice extends Fragment implements SortListener, BoxOfficeLoadedListner, SwipeRefreshLayout.OnRefreshListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -52,6 +55,7 @@ public class FragmentBoxOffice extends Fragment implements SortListener {
     private RecyclerView listMovieHits;
     private AdapterBoxOffice adapterBoxOffice;
     private TextView onVolleyError;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private MoviesSorter moviesSorter = new MoviesSorter();
 
     public FragmentBoxOffice() {
@@ -118,6 +122,8 @@ public class FragmentBoxOffice extends Fragment implements SortListener {
         View view = inflater.inflate(R.layout.fragment_box_office, container, false);
         onVolleyError = (TextView) view.findViewById(R.id.textVolleyError);
         listMovieHits = (RecyclerView) view.findViewById(R.id.listMovieHits);
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeMoviehits);
+        swipeRefreshLayout.setOnRefreshListener(this);
         listMovieHits.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapterBoxOffice = new AdapterBoxOffice(getActivity());
         listMovieHits.setAdapter(adapterBoxOffice);
@@ -126,6 +132,9 @@ public class FragmentBoxOffice extends Fragment implements SortListener {
         } else {
             //sendJSONRequest();
             listMovies = MyApplication.getWritableDatabase().getAllMoviesBoxOffice();
+            if (listMovies.isEmpty()) {
+                new TaskLoadMoviesBoxOffice(this).execute();
+            }
         }
         adapterBoxOffice.setMovieList(listMovies);
         return view;
@@ -151,5 +160,20 @@ public class FragmentBoxOffice extends Fragment implements SortListener {
         L.t(getActivity(), "Box Office Sort By Ratng");
         moviesSorter.sortMoviesByRating(listMovies);
         adapterBoxOffice.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onBoxOfficeMoviesLoaded(ArrayList<Movie> movies) {
+        if (swipeRefreshLayout.isRefreshing()) {
+            swipeRefreshLayout.setRefreshing(false);
+        }
+        listMovies = new ArrayList<>();
+        listMovies.addAll(movies);
+        adapterBoxOffice.setMovieList(listMovies);
+    }
+
+    @Override
+    public void onRefresh() {
+        new TaskLoadMoviesBoxOffice(this).execute();
     }
 }

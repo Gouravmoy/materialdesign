@@ -127,7 +127,7 @@ public class Movie implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(id);
+        //dest.writeLong(id);
         dest.writeString(title);
         dest.writeLong(releaseDateTheaatre == null ? -1 : releaseDateTheaatre.getTime());
         dest.writeInt(audienceScore);

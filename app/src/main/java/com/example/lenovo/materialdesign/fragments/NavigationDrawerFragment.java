@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.lenovo.materialdesign.R;
+import com.example.lenovo.materialdesign.activities.MainActivity;
 import com.example.lenovo.materialdesign.adapters.InfoAdapter;
 import com.example.lenovo.materialdesign.pojo.Information;
 
@@ -67,12 +68,12 @@ public class NavigationDrawerFragment extends Fragment {
         recyclerView.addOnItemTouchListener(new RecyclerTouchListner(getActivity(), recyclerView, new ClickListner() {
             @Override
             public void onClicked(View view, int position) {
-                Toast.makeText(getActivity(),"Clicked - > "+position,Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Clicked - > " + position, Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onLongClicked(View view, int position) {
-                Toast.makeText(getActivity(),"Long Clicked - > "+position,Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Long Clicked - > " + position, Toast.LENGTH_SHORT).show();
             }
         }));
         return layout;
@@ -115,20 +116,22 @@ public class NavigationDrawerFragment extends Fragment {
 
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
+                ((MainActivity) getActivity()).onDrawerSlide(slideOffset);
                 if (slideOffset < 0.6) {
                     toolbar.setAlpha(1 - slideOffset);
                 }
 
             }
         };
-        if (!mUserLearnedDrawer && !mFromSavedInstanceState) {
-            mDrawerLayout.openDrawer(containerView);
-        }
+
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerLayout.post(new Runnable() {
             @Override
             public void run() {
                 mDrawerToggle.syncState();
+                if (!mUserLearnedDrawer && !mFromSavedInstanceState) {
+                    mDrawerLayout.openDrawer(containerView);
+                }
             }
         });
 

@@ -4,6 +4,7 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -33,7 +34,6 @@ import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
 import me.tatarka.support.job.JobInfo;
 import me.tatarka.support.job.JobScheduler;
-import me.tatarka.support.os.PersistableBundle;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -41,11 +41,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final String TAG_SORT_DATE = "sortDate";
     private static final String TAG_SORT_RATINGS = "sortRatings";
     private static final int JOB_ID = 100;
+    private static final int POL_FREQUENCY = 12000000;
+    //private static final int POL_FREQUENCY = 5000;
     private JobScheduler jobScheduler;
     private Toolbar toolbar;
     private SlidingTabLayout mTabs;
     private ViewPager mPager;
     private MyPagerAdapter adapter;
+    FloatingActionButton actionButton;
+    FloatingActionMenu actionMenu;
     public final int MOVIES_SEARCH_RESULTS = 0;
     public final int MOVIES_HITS = 1;
     public final int MOVIES_UPCOMING = 2;
@@ -55,7 +59,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         jobScheduler = JobScheduler.getInstance(this);
-        constructJob();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                constructJob();
+            }
+        }, 30000);
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -80,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void constructJob() {
         JobInfo.Builder builder = new JobInfo.Builder(JOB_ID, new ComponentName(this, MyService.class));
-        builder.setPeriodic(2000)
+        builder.setPeriodic(POL_FREQUENCY)
                 .setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED)
                 .setPersisted(true);
         jobScheduler.schedule(builder.build());
@@ -89,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void createFAB() {
         ImageView icon = new ImageView(this); // Create an icon
         icon.setImageResource(R.drawable.sort);
-        FloatingActionButton actionButton = new FloatingActionButton.Builder(this)
+        actionButton = new FloatingActionButton.Builder(this)
                 .setContentView(icon)
                 .build();
         ImageView iconSortName = new ImageView(this); // Create an icon
@@ -109,12 +118,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         buttonSortByName.setOnClickListener(this);
         buttonSortByDate.setOnClickListener(this);
         buttonSortByRating.setOnClickListener(this);
-        FloatingActionMenu actionMenu = new FloatingActionMenu.Builder(this)
+        actionMenu = new FloatingActionMenu.Builder(this)
                 .addSubActionView(buttonSortByName)
                 .addSubActionView(buttonSortByDate)
                 .addSubActionView(buttonSortByRating)
                 .attachTo(actionButton)
                 .build();
+    }
+
+    private void toggleTranslateFAB(float slideOffset) {
+        if (actionMenu != null) {
+            if (actionMenu.isOpen()) {
+                actionMenu.close(true);
+            }
+            actionButton.setTranslationX(slideOffset * 400);
+        }
+    }
+
+    public void onDrawerSlide(float slideOffset) {
+        toggleTranslateFAB(slideOffset);
     }
 
     @Override
